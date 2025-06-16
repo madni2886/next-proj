@@ -2,7 +2,7 @@
 
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-
+import Link from 'next/link';
 export default function Navbar() {
   const router = useRouter();
   const pathname = usePathname();
@@ -26,7 +26,7 @@ export default function Navbar() {
 
   return (
     <nav className="w-full bg-gray-800 text-white flex justify-between items-center px-6 py-4 shadow">
-      <a href="/" className="text-xl font-bold">My App</a>
+      <Link href="/" className="text-xl font-bold">My App</Link>
       {isLoggedIn ? (
         <button
           onClick={handleLogout}
