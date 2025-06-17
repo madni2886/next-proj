@@ -1,12 +1,9 @@
 "use client";
 
-import { error } from "console";
 import { startTransition } from "react";
 import { useRouter } from "next/navigation";
-import { start } from "repl";
 
 export default function ErrorBoundary({
-  error,
   reset,
 }: {
   error: Error;

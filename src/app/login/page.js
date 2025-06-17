@@ -28,12 +28,13 @@ export default function LoginPage() {
       <input type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} className="border p-2 w-full my-2" />
       <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} className="border p-2 w-full my-2" />
       <button type="submit" className="bg-green-600 text-white px-4 py-2  cursor-pointer hover:bg-green-700">Login</button>
-    <p className="text-sm mt-4 text-gray-600 text-center">
-  Don't have an account?{' '}
+<p className="text-sm mt-4 text-gray-600 text-center">
+  Don&apos;t have an account?{' '}
   <Link href="/signup" className="text-blue-600 hover:underline">
     Sign Up
   </Link>
 </p>
+
 
     </form>
   );
