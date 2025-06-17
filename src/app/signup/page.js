@@ -15,9 +15,9 @@ export default function SignupPage() {
   const [zipCode, setZipCode] = useState('');
   const [country, setCountry] = useState('');
   const [dateOfBirth, setDateOfBirth] = useState('');
-  const [profilePicture, setProfilePicture] = useState('');
-  const [isActive, setIsActive] = useState(true);
-  const [isAdmin, setIsAdmin] = useState(false);
+  // const [profilePicture, setProfilePicture] = useState('');
+  // const [isActive, setIsActive] = useState(true);
+  // const [isAdmin, setIsAdmin] = useState(false);
   const router = useRouter();
 
   const handleSignup = async (e) => {
