@@ -1,3 +1,4 @@
+// src/app/api/user-stats/route.js
 import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/dbConnect';
 import User from '@/models/User';
@@ -18,11 +19,5 @@ export async function GET() {
     { $sort: { _id: 1 } }
   ]);
 
-  return NextResponse.json({
-    signupsByMonth: stats.map(item => ({
-      month: item._id,
-      count: item.count,
-      emails: item.emails,
-    }))
-  });
+  return NextResponse.json(stats);
 }

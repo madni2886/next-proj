@@ -18,12 +18,11 @@ export default function UserStatsPage() {
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload?.length) {
       const { count, emails } = payload[0].payload;
-      console.log("payload",payload)
       return (
         <div className="bg-white p-3 border shadow rounded text-black text-sm">
           <p className="font-semibold">Date: {label}</p>
           <p>Registrations: {count}</p>
-          <p className="mt-1">Emails:</p> 
+          <p className="mt-1">Emails:</p>
           <ul className="list-disc list-inside">
             {emails.map((email, index) => (
               <li key={index}>{email}</li>

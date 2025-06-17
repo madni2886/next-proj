@@ -1,34 +1,31 @@
 'use client';
-import { useEffect, useState } from 'react';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import UserStatsPage from '../user-stats/page';
 
-export default function Charts() {
-  const [data, setData] = useState(null);
+export default function Dashboard() {
+  const router = useRouter();
 
   useEffect(() => {
-    const fetchStats = async () => {
-      const res = await fetch('/api/stats');
-      const result = await res.json();
-      setData(result);
-    };
-    fetchStats();
+    const token = localStorage.getItem('token');
+    if (!token) router.push('/login');
   }, []);
 
-  if (!data) {
-    return <p className="text-center text-gray-500">Loading chart data...</p>;
-  }
+  return( <>
+  <div className="p-6 text-xl">Welcome to your Dashboard 🎉</div>
+  <div className=''>
+    <UserStatsPage/>
+  </div>
+  <a href="/create-post" className="text-blue-600 hover:underline p-4 block bg-gray-100 rounded-md shadow-md transition hover:bg-gray-200 center align-middle">
+    Create a New Post
+  </a>
+  <a href="/users" className="text-blue-600 hover:underline p-4 block bg-gray-100 rounded-md shadow-md transition hover:bg-gray-200 center align-middle">
+    View All Users
+  </a>
 
-  return (
-    <div className="w-full h-96 bg-white rounded shadow p-4">
-      <h2 className="text-lg font-semibold mb-2">Signups by Month</h2>
-      <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={data.signupsByMonth}>
-          <XAxis dataKey="month" />
-          <YAxis />
-          <Tooltip />
-          <Bar dataKey="count" fill="#4F46E5" />
-        </BarChart>
-      </ResponsiveContainer>
-    </div>
-  );
+  <a href="/posts" className="text-blue-600 hover:underline p-4 block bg-gray-100 rounded-md shadow-md transition hover:bg-gray-200 center align-middle">
+    View All Posts
+  </a>
+</>
+);
 }
