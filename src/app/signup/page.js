@@ -20,6 +20,7 @@ export default function SignupPage() {
   // const [isAdmin, setIsAdmin] = useState(false);
   const router = useRouter();
 
+  
   const handleSignup = async (e) => {
     e.preventDefault();
     const res = await fetch('/api/auth/signup', {
