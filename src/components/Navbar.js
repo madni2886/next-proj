@@ -17,9 +17,6 @@ export default function Navbar() {
 
  useEffect(() => {
   setHasMounted(true);
-
-  const token = localStorage.getItem('token');
-
   if (user) {
     try {
       const name = user.trim();
