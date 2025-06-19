@@ -21,6 +21,21 @@ export default function LoginPage() {
     if (res.ok) {
       localStorage.setItem('token', data.token);
       localStorage.setItem('userId', data.user._id); // adjust based on your auth response
+      // console.log(`User: ${data.user.userName}`);
+      localStorage.setItem('user', data.user.userName);
+      localStorage.setItem(
+  'user_details',
+  JSON.stringify({
+    name: 'Muhammad Madni',
+    email: 'madni@example.com',
+    phone: '0300-1234567',
+    address: 'Sargodha',
+    city: 'Lahore',
+    dateOfBirth: '1999-07-29',
+    profilePicture: '/images/cruel-war-scenes-digital-painting.jpg'
+  })
+);
+
       router.push('/dashboard');
     }
   };

@@ -44,9 +44,11 @@ export async function GET(req) {
   }
 }
 
-export async function DELETE(req) {
+export async function DELETE(req, { params }) {
+  console.log("DELETE route called");
+
   await dbConnect();
-  const { id } = await req.json();
+  const { id } = params;
 
   if (!id) {
     return NextResponse.json({ error: 'Missing post ID' }, { status: 400 });
