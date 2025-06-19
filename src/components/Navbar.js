@@ -11,7 +11,6 @@ export default function Navbar() {
   const dropdownRef = useRef(null);
 
   const [hasMounted, setHasMounted] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [initials, setInitials] = useState('');
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const user = localStorage.getItem('user'); // or parse if it's a full object
@@ -20,9 +19,6 @@ export default function Navbar() {
   setHasMounted(true);
 
   const token = localStorage.getItem('token');
-
-
-  setIsLoggedIn(!!token);
 
   if (user) {
     try {
@@ -53,7 +49,6 @@ export default function Navbar() {
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    setIsLoggedIn(false);
     router.push('/login');
   };
 
