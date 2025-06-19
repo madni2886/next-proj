@@ -24,3 +24,13 @@ export async function PUT(req, { params }) {
 
   return NextResponse.json({ message: 'Post updated', post: updatedPost });
 }
+export async function DELETE(req, { params }) {
+  await dbConnect();
+  const deletedPost = await Post.findByIdAndDelete(params.id);
+
+  if (!deletedPost) {
+    return NextResponse.json({ error: 'Post not found' }, { status: 404 });
+  }
+
+  return NextResponse.json({ message: 'Post deleted' });
+}

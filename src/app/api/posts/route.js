@@ -44,20 +44,4 @@ export async function GET(req) {
   }
 }
 
-export async function DELETE(req, { params }) {
-  console.log("DELETE route called");
 
-  await dbConnect();
-  const { id } = params;
-
-  if (!id) {
-    return NextResponse.json({ error: 'Missing post ID' }, { status: 400 });
-  }
-
-  const post = await Post.findByIdAndDelete(id);
-  if (!post) {
-    return NextResponse.json({ error: 'Post not found' }, { status: 404 });
-  }
-
-  return NextResponse.json({ message: 'Post deleted successfully' });
-}
