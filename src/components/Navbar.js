@@ -11,41 +11,63 @@ export default function Navbar() {
   const dropdownRef = useRef(null);
 
   const [hasMounted, setHasMounted] = useState(false);
+  const [user, setUser] = useState('');
   const [initials, setInitials] = useState('');
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const user = localStorage.getItem('user'); // or parse if it's a full object
 
- useEffect(() => {
-  setHasMounted(true);
-  if (user) {
-    try {
-      const name = user.trim();
-      const nameParts = name.split(' ');
-      const first = nameParts[0]?.charAt(0) || '';
-      const second = nameParts[1]?.charAt(0) || '';
-      setInitials((first + second).toUpperCase());
-    } catch {
-      setInitials('');
+  // ✅ Read from localStorage inside useEffect so it updates dynamically
+  useEffect(() => {
+    setHasMounted(true);
+
+    const storedUser = localStorage.getItem('user');
+    setUser(storedUser);
+
+    if (storedUser) {
+      try {
+        const nameParts = storedUser.trim().split(' ');
+        const first = nameParts[0]?.charAt(0) || '';
+        const second = nameParts[1]?.charAt(0) || '';
+        setInitials((first + second).toUpperCase());
+      } catch {
+        setInitials('');
+      }
     }
-  }
 
-  const handleClickOutside = (event) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-      setDropdownOpen(false);
-    }
-  };
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    };
 
-  document.addEventListener('mousedown', handleClickOutside);
+    window.addEventListener('mousedown', handleClickOutside);
 
-  return () => {
-    document.removeEventListener('mousedown', handleClickOutside);
-  };
-}, []);
+    // ✅ Optional: Listen for login/logout events if other components update storage
+    const handleAuthChange = () => {
+      const updatedUser = localStorage.getItem('user');
+      setUser(updatedUser);
+      if (updatedUser) {
+        const nameParts = updatedUser.trim().split(' ');
+        const first = nameParts[0]?.charAt(0) || '';
+        const second = nameParts[1]?.charAt(0) || '';
+        setInitials((first + second).toUpperCase());
+      } else {
+        setInitials('');
+      }
+    };
 
+    window.addEventListener('authChanged', handleAuthChange);
+
+    return () => {
+      window.removeEventListener('mousedown', handleClickOutside);
+      window.removeEventListener('authChanged', handleAuthChange);
+    };
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    setUser(null);
+    window.dispatchEvent(new Event('authChanged')); // 🔄 trigger reactivity
     router.push('/login');
   };
 
@@ -53,6 +75,7 @@ export default function Navbar() {
 
   return (
     <nav className="w-full bg-gray-800 text-white flex justify-between items-center px-6 py-4 shadow">
+      {/* Logo and App Name */}
       <Link href="/" className="flex items-center gap-2">
         <Image
           src="/images/cruel-war-scenes-digital-painting.jpg"
@@ -64,45 +87,46 @@ export default function Navbar() {
         <span className="text-xl font-bold">My App</span>
       </Link>
 
+      {/* Auth Buttons */}
       <div className="relative flex items-center gap-4">
-        {user && (
-          <div
-            onClick={() => setDropdownOpen(!dropdownOpen)}
-            className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-sm cursor-pointer"
-          >
-            {initials}
-          </div>
-        )}
+        {user ? (
+          <>
+            <div
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+              className="w-10 h-10 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-sm cursor-pointer"
+            >
+              {initials}
+            </div>
 
-        {dropdownOpen && (
-          <div
-            ref={dropdownRef}
-            className="absolute top-14 right-0 bg-white text-black rounded shadow-md w-40 z-10"
-          >
-            <Link
-              href="/profile"
-              className="block px-4 py-2 hover:bg-gray-100"
-              onClick={() => setDropdownOpen(false)}
-            >
-              Profile
-            </Link>
-            <Link
-              href="/settings"
-              className="block px-4 py-2 hover:bg-gray-100"
-              onClick={() => setDropdownOpen(false)}
-            >
-              Settings
-            </Link>
-            <button
-              onClick={handleLogout}
-              className="block w-full text-left px-4 py-2 hover:bg-red-100 text-red-600"
-            >
-              Logout
-            </button>
-          </div>
-        )}
-
-        {!user && (
+            {dropdownOpen && (
+              <div
+                ref={dropdownRef}
+                className="absolute top-14 right-0 bg-white text-black rounded shadow-md w-40 z-10"
+              >
+                <Link
+                  href="/profile"
+                  className="block px-4 py-2 hover:bg-gray-100"
+                  onClick={() => setDropdownOpen(false)}
+                >
+                  Profile
+                </Link>
+                <Link
+                  href="/settings"
+                  className="block px-4 py-2 hover:bg-gray-100"
+                  onClick={() => setDropdownOpen(false)}
+                >
+                  Settings
+                </Link>
+                <button
+                  onClick={handleLogout}
+                  className="block w-full text-left px-4 py-2 hover:bg-red-100 text-red-600"
+                >
+                  Logout
+                </button>
+              </div>
+            )}
+          </>
+        ) : (
           <button
             onClick={() => router.push('/login')}
             className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-md transition"
